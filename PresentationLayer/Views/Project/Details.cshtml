@@ -1,0 +1,63 @@
+﻿@using BusinessLogicLayer.DTO;
+@using BusinessLogicLayer.Infrastructure.Comparers;
+@model ProjectDTO
+
+@{
+    ViewBag.Title = "Детали";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/Scripts/projectData.js")
+}
+
+<h2>Детальная форма:</h2>
+<div>
+    <h4>Проект</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt style="width: 170px;">@Html.LabelFor(model => model.Name)</dt>
+        <dd> @Html.DisplayFor(model => model.Name) </dd>
+
+        <dt style="width: 170px;">@Html.LabelFor(model => model.CustomerName)</dt>
+        <dd>@Html.DisplayFor(model => model.CustomerName)</dd>
+
+        <dt style="width: 170px;">@Html.LabelFor(model => model.ExecutingCompany)</dt>
+        <dd>@Html.DisplayFor(model => model.ExecutingCompany)</dd>
+
+        <dt style="width: 170px;">@Html.LabelFor(model => model.StartDate)</dt>
+        <dd>@Html.DisplayFor(model => model.StartDate)</dd>
+
+        <dt style="width: 170px;">@Html.LabelFor(model => model.EndDate)</dt>
+        <dd>@Html.DisplayFor(model => model.EndDate)</dd>
+
+        <dt style="width: 170px;">@Html.LabelFor(model => model.Priority)</dt>
+        <dd>@Html.DisplayFor(model => model.Priority)</dd>
+    </dl>
+    <p>
+        @Html.ActionLink("К списку", "Index") |
+        @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id })
+    </p>
+    @if (ViewBag.Employees != null)
+    {
+        var employeeDTOEqualityComparer = new EmployeeDTOEqualityComparer();
+        <label>Роль в проекте: </label>
+        <table class="table">
+            <tr>
+                <th>@Html.LabelFor(model => model.Employees)</th>
+                <th>@Html.LabelFor(model => model.Executors)</th>
+                <th>@Html.LabelFor(model => model.ProjectManagerId)</th>
+                <th>ФИО</th>
+            </tr>
+            @foreach (EmployeeDTO employee in ViewBag.Employees)
+            {
+                var a = Model.ProjectManagerId == employee.Id;
+                <tr>
+                    <td><input type="checkbox" name="selectedEmployees" value="@employee.Id" readonly @(Model.Employees.Contains(employee, employeeDTOEqualityComparer) ? "checked=\"checked\"" : "") /></td>
+                    <td><input type="checkbox" name="selectedExecutors" value="@employee.Id" readonly @(Model.Executors.Contains(employee, employeeDTOEqualityComparer) ? "checked=\"checked\"" : "") /></td>
+                    <td>@Html.RadioButtonFor(model => model.ProjectManagerId, employee.Id, new { @readonly = "readonly" }) </td>
+                    <td><div data-toggle="tooltip" data-placement="bottom" class="text-truncate">@employee.FirstName @employee.LastName @employee.MiddleName </div></td>
+                </tr>
+            }
+        </table>
+    }
+</div>

@@ -1,0 +1,43 @@
+﻿.text-truncate {
+    max-width: 15em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table-row-truncate tr > td > div {
+    max-width: 10em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table-row-truncate tr > td:last-child {
+    max-width: 100%;
+    white-space: nowrap;
+}
+
+tr > th {
+    cursor: pointer;
+}
+
+    tr > th:hover {
+        background-color: darkcyan;
+    }
+
+#info {
+    padding: 2px;
+    width: 25px;
+    border-radius: 13px;
+}
+
+.tooltip-inner {
+    max-width: 600px;
+    white-space: pre-line;
+    overflow-wrap: break-word;
+}
+
+input[type="checkbox"][readonly],
+input[type="radio"][readonly] {
+    pointer-events: none;
+}

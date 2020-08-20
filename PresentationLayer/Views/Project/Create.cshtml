@@ -1,0 +1,98 @@
+﻿@using BusinessLogicLayer.DTO;
+@model ProjectDTO
+
+@{
+    ViewBag.Title = "Создание";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/Scripts/projectData.js")
+}
+
+<h2>Создание</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Проект</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @maxlength = "128" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control", @maxlength = "128" } })
+                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExecutingCompany, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ExecutingCompany, new { htmlAttributes = new { @class = "form-control", @maxlength = "128" } })
+                @Html.ValidationMessageFor(model => model.ExecutingCompany, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Priority, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Priority, new { htmlAttributes = new { @class = "form-control", @maxlength = "128" } })
+                @Html.ValidationMessageFor(model => model.Priority, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Создать" class="btn btn-default" /> |
+                @Html.ActionLink("К списку", "Index")
+            </div>
+        </div>
+
+        @if (ViewBag.Employees != null)
+        {
+            <label>Роль в проекте: <button type="button" id="info" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Очистить руководиля: Ctrl + clickMouse">i</button></label>
+            <table class="table">
+                <tr>
+                    <th>@Html.LabelFor(model => model.Employees)</th>
+                    <th>@Html.LabelFor(model => model.Executors)</th>
+                    <th>@Html.LabelFor(model => model.ProjectManager)</th>
+                    <th>ФИО</th>
+                </tr>
+                @foreach (EmployeeDTO employee in ViewBag.Employees)
+                {
+                    <tr>
+                        <td><input type="checkbox" name="selectedEmployees" value="@employee.Id" @(Model.Employees.Contains(employee) ? "checked=\"checked\"" : "") /></td>
+                        <td><input type="checkbox" name="selectedExecutors" value="@employee.Id" @(Model.Executors.Contains(employee) ? "checked=\"checked\"" : "") /></td>
+                        <td>@Html.RadioButtonFor(model => model.ProjectManagerId, @employee.Id)</td>
+                        <td><div data-toggle="tooltip" data-placement="bottom" class="text-truncate">@employee.FirstName @employee.LastName @employee.MiddleName </div></td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+}

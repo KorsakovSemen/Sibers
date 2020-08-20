@@ -1,0 +1,96 @@
+﻿@using BusinessLogicLayer.DTO;
+@using PresentationLayer.Models;
+@model ProjectDTOListViewModels
+
+@{
+    ViewBag.Title = "Обзор проектов";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/Scripts/projectData.js")
+}
+
+<h2>Проекты</h2>
+<p>
+    <button type="button" onclick="location.href='@Url.Action("Create", "Project")'" class="btn btn-info add-new"><i style="font-weight:bold; font-size:16px">+</i> Новый</button>
+</p>
+<form method="get" style="margin-bottom: 15px">
+    <div class="form-inline">
+        <label class="control-label">Приоритет: </label>
+        @Html.DropDownList("priorityFilter", Model.Priorities as SelectList, htmlAttributes: new { @class = "form-control" })
+        <input type="number" value="0" name="priorityCurrent" class="form-control" />
+        <label class="control-label">Дата начала с: </label>
+        <input type="date" name="startDateTimeFrom" class="form-control" />
+        <label class="control-label">по</label>
+        <input type="date" name="startDateTimeTo" class="form-control" />
+        <input type="submit" value="Фильтр" class="btn btn-default" />
+        @Html.ValidationMessage("date", "", new { @class = "text-danger" })
+    </div>
+</form>
+@if (Model.Projects != null && Model.Projects.Count() > 0)
+{
+    var first = Model.Projects.First();
+    <table class="table table-bordered table-row-truncate">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => first.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => first.CustomerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => first.ExecutingCompany)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => first.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => first.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => first.Priority)
+            </th>
+            <th>
+                <div>@Html.DisplayNameFor(model => first.Employees)</div>
+            </th>
+            <th>
+                <div>@Html.DisplayNameFor(model => first.Executors)</div>
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.Projects)
+        {
+            <tr>
+                <td>
+                    <div data-toggle="tooltip" data-placement="bottom">@Html.DisplayFor(modelItem => item.Name)</div>
+                </td>
+                <td>
+                    <div data-toggle="tooltip" data-placement="bottom">@Html.DisplayFor(modelItem => item.CustomerName)</div>
+                </td>
+                <td>
+                    <div data-toggle="tooltip" data-placement="bottom">@Html.DisplayFor(modelItem => item.ExecutingCompany)</div>
+                </td>
+                <td>
+                    <div data-toggle="tooltip" data-placement="bottom">@Html.DisplayFor(modelItem => item.StartDate)</div>
+                </td>
+                <td>
+                    <div data-toggle="tooltip" data-placement="bottom">@Html.DisplayFor(modelItem => item.EndDate)</div>
+                </td>
+                <td>
+                    <div data-toggle="tooltip" data-placement="bottom">@Html.DisplayFor(modelItem => item.Priority)</div>
+                </td>
+                <td>
+                    <div data-toggle="tooltip" data-placement="bottom">@Html.DisplayFor(modelItem => item.EmployeesAmount)</div>
+                </td>
+                <td>
+                    <div data-toggle="tooltip" data-placement="bottom">@Html.DisplayFor(modelItem => item.ExecutorsAmount)</div>
+                </td>
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Детали", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </table>
+}
